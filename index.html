@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Media Pembelajaran Algoritma Pencarian | Informatika SMA Kelas 10</title>
+  <meta name="description" content="Web pembelajaran interaktif materi Algoritma Pencarian (Linear Search) untuk Informatika SMA Kelas 10 Fase E dengan simulasi langkah demi langkah." />
+  <meta property="og:title" content="Media Pembelajaran Algoritma Pencarian" />
+  <meta property="og:description" content="Web pembelajaran interaktif materi Algoritma Pencarian untuk Informatika SMA Kelas 10 Fase E." />
+  <style>
+    /* Reset & Base Variables */
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --primary-light: #e0e7ff;
+      --secondary: #0ea5e9;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --dark: #0f172a;
+      --gray-800: #1e293b;
+      --gray-700: #334155;
+      --gray-600: #475569;
+      --gray-500: #64748b;
+      --gray-300: #cbd5e1;
+      --gray-200: #e2e8f0;
+      --gray-100: #f1f5f9;
+      --gray-50: #f8fafc;
+      --white: #ffffff;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--gray-50);
+      color: var(--gray-800);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 16px 20px 48px;
+    }
+
+    /* Header */
+    header {
+      background: linear-gradient(135deg, #312e81 0%, #4338ca 50%, #3b82f6 100%);
+      color: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 28px 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      padding: 4px 14px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    header h1 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 760px;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      background: var(--white);
+      padding: 6px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 24px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 12px 18px;
+      border: none;
+      background: transparent;
+      color: var(--gray-600);
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      background: var(--gray-100);
+      color: var(--dark);
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: var(--white);
+      box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
+    }
+
+    /* Tab Content Panels */
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Card Component */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--gray-100);
+    }
+
+    /* Typography & Lists */
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--gray-800);
+      margin: 16px 0 8px;
+    }
+
+    p {
+      color: var(--gray-700);
+      margin-bottom: 12px;
+    }
+
+    .highlight-box {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      padding: 14px 16px;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin: 16px 0;
+      font-size: 0.95rem;
+      color: #1e1b4b;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .info-box {
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      background: var(--gray-50);
+    }
+
+    .info-box h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .tag-blue { background: #dbeafe; color: #1d4ed8; }
+    .tag-green { background: #d1fae5; color: #047857; }
+    .tag-amber { background: #fef3c7; color: #b45309; }
+
+    /* Code block */
+    pre.code-block {
+      background: var(--gray-800);
+      color: #e2e8f0;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
+      margin: 12px 0;
+      line-height: 1.5;
+    }
+
+    /* Comparison Table */
+    .table-container {
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      border: 1px solid var(--gray-200);
+      padding: 10px 14px;
+      text-align: left;
+    }
+
+    th {
+      background: var(--gray-100);
+      font-weight: 700;
+      color: var(--gray-800);
+    }
+
+    tr:nth-child(even) {
+      background: var(--gray-50);
+    }
+
+    /* Simulation Styles */
+    .sim-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .input-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gray-700);
+    }
+
+    .input-group input, .input-group select {
+      padding: 9px 12px;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      background: var(--white);
+      color: var(--gray-800);
+      transition: border-color 0.2s;
+    }
+
+    .input-group input:focus, .input-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: var(--white);
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: var(--gray-100);
+      color: var(--gray-700);
+      border: 1px solid var(--gray-300);
+    }
+    .btn-secondary:hover {
+      background: var(--gray-200);
+      color: var(--dark);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: var(--white);
+    }
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    .btn-warning {
+      background: var(--warning);
+      color: var(--white);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* Array Display Stage */
+    .array-stage {
+      background: var(--gray-50);
+      border: 2px dashed var(--gray-300);
+      border-radius: var(--radius-md);
+      padding: 28px 16px;
+      margin: 20px 0;
+      overflow-x: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .array-container {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: flex-end;
+      min-height: 120px;
+      padding: 10px 6px;
+    }
+
+    .array-cell-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pointer-arrow {
+      height: 24px;
+      font-size: 1.2rem;
+      color: var(--warning);
+      font-weight: 900;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: all 0.2s ease;
+    }
+
+    .pointer-arrow.visible {
+      opacity: 1;
+      transform: translateY(0);
+      animation: bounce 0.6s infinite alternate;
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-5px); }
+    }
+
+    .array-cell {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--white);
+      border: 2px solid var(--gray-300);
+      border-radius: var(--radius-sm);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gray-800);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .cell-index {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+      font-weight: 600;
+    }
+
+    /* States */
+    .array-cell.checking {
+      border-color: var(--warning);
+      background: var(--warning-light);
+      color: #92400e;
+      transform: scale(1.1);
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.25);
+    }
+
+    .array-cell.mismatch {
+      border-color: var(--danger);
+      background: var(--danger-light);
+      color: #991b1b;
+      opacity: 0.75;
+    }
+
+    .array-cell.found {
+      border-color: var(--success);
+      background: var(--success-light);
+      color: #065f46;
+      transform: scale(1.12);
+      box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.35);
+      animation: pulseFound 0.6s ease-in-out;
+    }
+
+    @keyframes pulseFound {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1.12); }
+    }
+
+    /* Explanation & Live Log */
+    .status-panel {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      width: fit-content;
+    }
+
+    .status-ready { background: var(--gray-200); color: var(--gray-700); }
+    .status-running { background: var(--warning-light); color: #92400e; }
+    .status-found { background: var(--success-light); color: #065f46; }
+    .status-notfound { background: var(--danger-light); color: #991b1b; }
+
+    .step-narration {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--gray-800);
+      min-height: 28px;
+    }
+
+    .log-box {
+      background: var(--gray-800);
+      color: #f8fafc;
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.86rem;
+      max-height: 140px;
+      overflow-y: auto;
+      line-height: 1.5;
+      margin-top: 10px;
+    }
+
+    .log-item {
+      margin-bottom: 4px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 4px;
+    }
+
+    .log-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .stat-badge {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* Video section */
+    .video-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .video-grid {
+        grid-template-columns: 2fr 1fr;
+      }
+    }
+
+    .video-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .video-header {
+      padding: 16px 20px;
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .video-header h3 {
+      margin: 0 0 4px;
+      font-size: 1.05rem;
+      color: var(--dark);
+    }
+
+    .video-header p {
+      margin: 0;
+      font-size: 0.85rem;
+      color: var(--gray-500);
+    }
+
+    .iframe-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      height: 0;
+      background: #000;
+    }
+
+    .iframe-wrapper.shorts-ratio {
+      padding-bottom: 140%; /* Portrait ratio for Shorts */
+      max-width: 320px;
+      margin: 0 auto;
+    }
+
+    .iframe-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .video-footer {
+      padding: 16px 20px;
+      font-size: 0.9rem;
+      color: var(--gray-600);
+    }
+
+    /* Quiz Component */
+    .quiz-container {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-top: 20px;
+    }
+
+    .quiz-question {
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quiz-btn {
+      text-align: left;
+      padding: 10px 14px;
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quiz-btn:hover {
+      background: var(--gray-100);
+      border-color: var(--gray-400);
+    }
+
+    .quiz-btn.correct {
+      background: var(--success-light);
+      border-color: var(--success);
+      color: #065f46;
+      font-weight: 600;
+    }
+
+    .quiz-btn.incorrect {
+      background: var(--danger-light);
+      border-color: var(--danger);
+      color: #991b1b;
+    }
+
+    .quiz-feedback {
+      margin-top: 10px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: none;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--gray-500);
+      padding-top: 20px;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .container {
+        padding: 12px 14px 32px;
+      }
+      header {
+        padding: 20px 16px;
+      }
+      header h1 {
+        font-size: 1.45rem;
+      }
+      .array-cell {
+        width: 48px;
+        height: 48px;
+        font-size: 1.05rem;
+      }
+      .btn {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="main-app">
+    <!-- Header -->
+    <header id="app-header">
+      <span class="badge-pill" id="badge-header">📖 Informatika SMA Kelas 10 • Fase E</span>
+      <h1 id="title-header">Algoritma Pencarian (Searching)</h1>
+      <p id="desc-header">
+        Pelajari cara komputer menemukan data secara cerdas dan sistematis melalui konsep berpikir komputasional serta simulasi interaktif Pencarian Berurutan (Linear Search).
+      </p>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs" id="navigation-tabs" aria-label="Menu Modul">
+      <button class="tab-btn active" id="tab-btn-materi" onclick="switchTab('materi')">
+        <span>📚</span> 1. Materi & Konsep
+      </button>
+      <button class="tab-btn" id="tab-btn-video" onclick="switchTab('video')">
+        <span>🎥</span> 2. Video Penjelasan
+      </button>
+      <button class="tab-btn" id="tab-btn-simulasi" onclick="switchTab('simulasi')">
+        <span>🔍</span> 3. Simulasi Interaktif
+      </button>
+    </nav>
+
+    <!-- ================= TAB 1: MATERI & KONSEP ================= -->
+    <section class="tab-panel active" id="panel-materi">
+      <!-- Card: Konsep Dasar Searching -->
+      <div class="card" id="card-konsep-dasar">
+        <h2 class="card-title"><span>💡</span> Konsep Dasar Algoritma Pencarian (Searching)</h2>
+        <p>
+          Dalam kehidupan sehari-hari, kita sering melakukan proses <strong>pencarian</strong>. Contohnya ketika kamu mencari nomor kontak teman di ponsel, mencari buku dengan judul tertentu di rak perpustakaan, atau mencari kaus kaki favorit di lemari pakaian.
+        </p>
+        <div class="highlight-box">
+          <strong>Definisi Searching dalam Informatika:</strong><br />
+          Searching adalah proses sistematis untuk menemukan posisi atau keberadaan suatu data tertentu (disebut <em>Key</em> atau <em>Target</em>) di dalam kumpulan sekumpulan data (disebut <em>Array</em> atau <em>List</em>).
+        </div>
+        <p>
+          Komputer tidak bisa melihat seluruh isi memori sekaligus seperti mata manusia. Komputer harus memeriksa data satu per satu atau menggunakan aturan matematis tertentu. Hasil pencarian biasanya berupa:
+        </p>
+        <ul style="margin-left: 20px; color: var(--gray-700); margin-bottom: 12px;">
+          <li><strong>Ditemukan (Found):</strong> Mengembalikan posisi atau nomor indeks elemen data tersebut.</li>
+          <li><strong>Tidak Ditemukan (Not Found):</strong> Memberikan sinyal bahwa data yang dicari tidak ada dalam koleksi.</li>
+        </ul>
+      </div>
+
+      <!-- Card: Linear Search & Data Terurut -->
+      <div class="card" id="card-linear-vs-binary">
+        <h2 class="card-title"><span>🔎</span> Jenis-Jenis Algoritma Pencarian</h2>
+
+        <div class="info-grid">
+          <!-- Linear Search -->
+          <div class="info-box">
+            <h4><span class="tag tag-blue">Metode 1</span> Pencarian Berurutan (Linear Search)</h4>
+            <p style="font-size: 0.92rem; margin-top: 8px;">
+              Metode pencarian paling sederhana. Komputer memeriksa elemen data <strong>satu per satu dari awal (indeks 0) hingga akhir</strong> secara berurutan sampai nilai yang dicari cocok atau seluruh data selesai diperiksa.
+            </p>
+            <ul style="font-size: 0.88rem; margin-left: 18px; color: var(--gray-600); margin-bottom: 8px;">
+              <li><strong>Syarat Data:</strong> Bebas (bisa acak / tidak terurut).</li>
+              <li><strong>Kasus Terbaik (Best Case):</strong> Target ada di posisi pertama (1 kali cek).</li>
+              <li><strong>Kasus Terburuk (Worst Case):</strong> Target di posisi terakhir atau tidak ada (memeriksa semua <em>N</em> data).</li>
+            </ul>
+          </div>
+
+          <!-- Data Terurut & Binary Search -->
+          <div class="info-box">
+            <h4><span class="tag tag-green">Metode 2</span> Pencarian pada Data Terurut</h4>
+            <p style="font-size: 0.92rem; margin-top: 8px;">
+              Jika data sudah terurut (misal dari kecil ke besar), kita bisa menerapkan algoritma yang jauh lebih efisien seperti <strong>Binary Search (Pencarian Bagi Dua)</strong>.
+            </p>
+            <ul style="font-size: 0.88rem; margin-left: 18px; color: var(--gray-600); margin-bottom: 8px;">
+              <li><strong>Syarat Data:</strong> <em>Wajib terurut</em> (Ascending / Descending).</li>
+              <li><strong>Prinsip:</strong> Periksa elemen tengah. Jika target lebih kecil, cari di paruh kiri; jika lebih besar, cari di paruh kanan.</li>
+              <li><strong>Efisiensi:</strong> Mengeliminasi separuh data di setiap langkah! Sangat cepat untuk jutaan data.</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3>Perbandingan Ringkas (Linear Search vs. Binary Search)</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Aspek</th>
+                <th>Linear Search (Berurutan)</th>
+                <th>Binary Search (Bagi Dua)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Kondisi Awal Data</strong></td>
+                <td>Data boleh acak (tidak perlu terurut)</td>
+                <td>Data <em>wajib</em> sudah diurutkan terlebih dahulu</td>
+              </tr>
+              <tr>
+                <td><strong>Kompleksitas Waktu</strong></td>
+                <td>O(n) - Bertambah sebanding dengan jumlah data</td>
+                <td>O(log n) - Sangat hemat langkah</td>
+              </tr>
+              <tr>
+                <td><strong>Kemudahan Pembuatan</strong></td>
+                <td>Sangat mudah dipahami dan diimplementasikan</td>
+                <td>Sedikit lebih rumit karena membutuhkan pembagian interval</td>
+              </tr>
+              <tr>
+                <td><strong>Kapan Digunakan?</strong></td>
+                <td>Data sedikit atau data dinamis yang sering berubah acak</td>
+                <td>Data berukuran besar yang sudah tersusun rapi (misal kamus)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Pseudocode (Alur Logika) Linear Search</h3>
+        <pre class="code-block" id="pseudocode-display">
+ALGORITMA LinearSearch(Array A, Nilai Target)
+1. Untuk setiap indeks i dari 0 sampai panjang(A) - 1 lakukan:
+2.    Jika A[i] sama dengan Target maka:
+3.       Tampilkan "Ditemukan pada indeks " + i
+4.       Hentikan proses (Return i)
+5. Jika perulangan selesai dan tidak ada yang cocok:
+6.    Tampilkan "Data tidak ditemukan" (Return -1)
+SELESAI</pre>
+      </div>
+
+      <!-- Mini Quiz Cepat -->
+      <div class="card" id="card-kuis-evaluasi">
+        <h2 class="card-title"><span>📝</span> Uji Pemahaman Cepat (Fase E)</h2>
+        <div class="quiz-container" id="quiz-box">
+          <p class="quiz-question" id="q1-text">
+            Pertanyaan: Jika terdapat sebuah daftar berisi 100 angka yang posisinya acak (tidak berurutan), algoritma pencarian manakah yang dapat langsung digunakan tanpa perlu mengurutkan data terlebih dahulu?
+          </p>
+          <div class="quiz-options" id="q1-options">
+            <button class="quiz-btn" onclick="checkAnswer(this, false, 'Binary Search memerlukan data yang sudah diurutkan terlebih dahulu.')" id="quiz-btn-a">
+              A. Binary Search (Pencarian Bagi Dua)
+            </button>
+            <button class="quiz-btn" onclick="checkAnswer(this, true, 'Tepat sekali! Linear Search dapat bekerja pada data acak karena memeriksa satu per satu dari awal hingga akhir.')" id="quiz-btn-b">
+              B. Linear Search (Pencarian Berurutan)
+            </button>
+            <button class="quiz-btn" onclick="checkAnswer(this, false, 'Bubble Sort adalah algoritma pengurutan (sorting), bukan pencarian (searching).')" id="quiz-btn-c">
+              C. Bubble Sort
+            </button>
+          </div>
+          <div class="quiz-feedback" id="quiz-feedback-box"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TAB 2: VIDEO PENJELASAN ================= -->
+    <section class="tab-panel" id="panel-video">
+      <div class="card" id="card-video-intro">
+        <h2 class="card-title"><span>🎬</span> Video Penjelasan Materi Searching</h2>
+        <p>
+          Tonton video penjelasan visual berikut untuk memperdalam konsep cara kerja algoritma pencarian dan visualisasinya dalam pemecahan masalah komputasi:
+        </p>
+      </div>
+
+      <div class="video-grid" id="video-grid-container">
+        <!-- Video 1: Full Explanation -->
+        <div class="video-card" id="video-card-1">
+          <div class="video-header">
+            <h3>🎥 Video Pembelajaran: Konsep Algoritma Searching</h3>
+            <p>Penjelasan lengkap konsep pencarian data dalam berpikir komputasional</p>
+          </div>
+          <div class="iframe-wrapper">
+            <iframe
+              id="iframe-video-1"
+              src="https://www.youtube.com/embed/J-gp6K3Uu8o"
+              title="Video Pembelajaran Algoritma Searching"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <div class="video-footer">
+            💡 <strong>Fokus Belajar:</strong> Perhatikan bagaimana komputer menelusuri data dan kriteria efisiensi ketika memproses jumlah elemen yang berbeda.
+          </div>
+        </div>
+
+        <!-- Video 2: Short Tip / Highlight -->
+        <div class="video-card" id="video-card-2">
+          <div class="video-header">
+            <h3>📱 Shorts: Visualisasi Singkat</h3>
+            <p>Ringkasan cepat & ilustrasi animasi</p>
+          </div>
+          <div class="iframe-wrapper shorts-ratio">
+            <iframe
+              id="iframe-video-2"
+              src="https://www.youtube.com/embed/gS_pLRB0v34"
+              title="Visualisasi Singkat Linear Search"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen>
+            </iframe>
+          </div>
+          <div class="video-footer" style="text-align: center;">
+            ⚡ <strong>Trik Cepat:</strong> Cocok untuk ditonton ulang sebelum mencoba simulasi interaktif.
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top: 24px;" id="card-video-summary">
+        <h2 class="card-title"><span>📌</span> Rangkuman Setelah Menonton</h2>
+        <ul style="margin-left: 20px; color: var(--gray-700); line-height: 1.8;">
+          <li>Pencarian adalah salah satu fondasi utama dalam <em>Computational Thinking</em> (Dekomposisi, Pengenalan Pola, Abstraksi, dan Perancangan Algoritma).</li>
+          <li>Setiap algoritma memiliki <em>trade-off</em> (kelebihan dan kekurangan) masing-masing tergantung kondisi awal data.</li>
+          <li>Yuk, langsung buktikan cara kerjanya dengan mengklik tab <strong>3. Simulasi Interaktif</strong> di atas!</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ================= TAB 3: SIMULASI INTERAKTIF ================= -->
+    <section class="tab-panel" id="panel-simulasi">
+      <!-- Pengaturan Simulasi -->
+      <div class="card" id="card-sim-controls">
+        <h2 class="card-title"><span>⚙️</span> Pengaturan Data & Target Pencarian</h2>
+
+        <div class="sim-controls">
+          <div class="input-group">
+            <label for="input-target">Angka yang Dicari (Target):</label>
+            <input type="number" id="input-target" value="42" placeholder="Contoh: 42" />
+          </div>
+
+          <div class="input-group">
+            <label for="input-array">Daftar Angka (Pisahkan dengan koma):</label>
+            <input type="text" id="input-array" value="15, 8, 42, 4, 23, 16, 9" placeholder="15, 8, 42, 4, 23" />
+          </div>
+
+          <div class="input-group">
+            <label for="select-speed">Kecepatan Animasi Otomatis:</label>
+            <select id="select-speed">
+              <option value="1500">Lambat (1.5 detik/langkah)</option>
+              <option value="900" selected>Sedang (0.9 detik/langkah)</option>
+              <option value="450">Cepat (0.45 detik/langkah)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-secondary" onclick="generateRandomArray()" id="btn-random">
+            🎲 Acak Angka Baru
+          </button>
+          <button class="btn btn-secondary" onclick="setPresetArray('sorted')" id="btn-preset-sorted">
+            📊 Contoh Data Terurut
+          </button>
+          <button class="btn btn-secondary" onclick="setPresetArray('notfound')" id="btn-preset-notfound">
+            ❌ Contoh Kasus Tidak Ketemu
+          </button>
+          <button class="btn btn-primary" onclick="applyCustomData()" id="btn-apply">
+            🔄 Terapkan Data
+          </button>
+        </div>
+        <div id="sim-warning-box" style="display: none; background: var(--danger-light); color: #991b1b; padding: 10px 14px; border-radius: var(--radius-sm); margin-top: 12px; font-size: 0.9rem; font-weight: 500;"></div>
+      </div>
+
+      <!-- Stage Visualisasi Array -->
+      <div class="card" id="card-stage-display">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
+          <h2 class="card-title" style="margin: 0; border: none; padding: 0;"><span>👀</span> Visualisasi Array Elemen Demi Elemen</h2>
+          <div class="stat-badge" id="stat-counters">
+            <span>Perbandingan: <strong id="stat-comp-count" style="color: var(--primary);">0</strong></span>
+            <span>Target: <strong id="stat-target-val" style="color: var(--dark);">42</strong></span>
+            <span>Ukuran Array: <strong id="stat-size-val">7 elemen</strong></span>
+          </div>
+        </div>
+
+        <div class="array-stage" id="array-stage">
+          <div class="array-container" id="array-container">
+            <!-- Array cell items will be generated by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Tombol Kontrol Step & Play -->
+        <div class="btn-group" style="justify-content: center; margin-top: 10px;">
+          <button class="btn btn-secondary" id="btn-reset" onclick="resetSimulation()">
+            ⏮️ Ulangi (Reset)
+          </button>
+          <button class="btn btn-primary" id="btn-step" onclick="stepSimulation()">
+            ⏭️ Langkah Selanjutnya (Step)
+          </button>
+          <button class="btn btn-success" id="btn-play" onclick="togglePlay()">
+            ▶️ Jalankan Otomatis
+          </button>
+        </div>
+
+        <!-- Panel Narasi Edukasi -->
+        <div class="status-panel" id="status-panel">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <div class="status-badge status-ready" id="status-pill">Siap Memulai</div>
+            <span style="font-size: 0.85rem; color: var(--gray-500);" id="step-indicator">Langkah 0</span>
+          </div>
+          <div class="step-narration" id="step-narration-text">
+            Klik tombol <strong>"Langkah Selanjutnya (Step)"</strong> atau <strong>"Jalankan Otomatis"</strong> untuk memulai pemeriksaan data.
+          </div>
+          <div class="log-box" id="simulation-log" aria-live="polite">
+            <div class="log-item">Log Aktivitas: Menunggu instruksi...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="app-footer">
+      <p>Media Pembelajaran Berpikir Komputasional • Materi Algoritma Pencarian (Searching)</p>
+      <p style="font-size: 0.78rem; margin-top: 4px; color: var(--gray-500);">
+        Dirancang khusus untuk Siswa SMA Kelas 10 (Fase E) • Vanilla HTML, CSS & JavaScript
+      </p>
+    </footer>
+  </div>
+
+  <!-- JavaScript Logika & Interaktivitas (Murni Tanpa Library) -->
+  <script>
+    // State Aplikasi
+    let currentArray = [15, 8, 42, 4, 23, 16, 9];
+    let targetValue = 42;
+    let currentIndex = -1;
+    let isRunning = false;
+    let isFinished = false;
+    let isFound = false;
+    let comparisonsCount = 0;
+    let timerInterval = null;
+
+    // Inisialisasi Pertama Kali
+    window.addEventListener('DOMContentLoaded', () => {
+      renderArray();
+      updateStats();
+    });
+
+    // Fungsi Penggantian Tab
+    function switchTab(tabId) {
+      // Pause jika simulasi sedang berjalan
+      if (isRunning) {
+        togglePlay();
+      }
+
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+
+      const activeBtn = document.getElementById('tab-btn-' + tabId);
+      const activePanel = document.getElementById('panel-' + tabId);
+
+      if (activeBtn) activeBtn.classList.add('active');
+      if (activePanel) activePanel.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Fungsi Render Elemen Array ke Layar
+    function renderArray() {
+      const container = document.getElementById('array-container');
+      container.innerHTML = '';
+
+      currentArray.forEach((val, idx) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'array-cell-wrapper';
+        wrapper.id = 'cell-wrapper-' + idx;
+
+        // Pointer Arrow
+        const arrow = document.createElement('div');
+        arrow.className = 'pointer-arrow';
+        arrow.id = 'arrow-' + idx;
+        arrow.innerHTML = '▼';
+
+        // Kotak Nilai
+        const cell = document.createElement('div');
+        cell.className = 'array-cell';
+        cell.id = 'cell-' + idx;
+        cell.innerText = val;
+
+        // Nomor Indeks
+        const indexLabel = document.createElement('div');
+        indexLabel.className = 'cell-index';
+        indexLabel.innerText = '[' + idx + ']';
+
+        wrapper.appendChild(arrow);
+        wrapper.appendChild(cell);
+        wrapper.appendChild(indexLabel);
+        container.appendChild(wrapper);
+      });
+    }
+
+    // Update Statistik
+    function updateStats() {
+      document.getElementById('stat-comp-count').innerText = comparisonsCount;
+      document.getElementById('stat-target-val').innerText = targetValue;
+      document.getElementById('stat-size-val').innerText = currentArray.length + ' elemen';
+    }
+
+    function showWarning(msg) {
+      const box = document.getElementById('sim-warning-box');
+      if (box) {
+        box.innerText = '⚠️ ' + msg;
+        box.style.display = 'block';
+        setTimeout(() => {
+          box.style.display = 'none';
+        }, 4000);
+      }
+    }
+
+    // Terapkan Data Kustom dari Input
+    function applyCustomData() {
+      if (isRunning) togglePlay();
+
+      const rawText = document.getElementById('input-array').value;
+      const targetInput = document.getElementById('input-target').value;
+
+      const parsedTarget = parseInt(targetInput, 10);
+      if (isNaN(parsedTarget)) {
+        showWarning('Mohon masukkan angka target yang valid!');
+        return;
+      }
+
+      const parsedArray = rawText
+        .split(',')
+        .map(item => parseInt(item.trim(), 10))
+        .filter(item => !isNaN(item));
+
+      if (parsedArray.length === 0) {
+        showWarning('Mohon masukkan minimal 1 angka dalam daftar array!');
+        return;
+      }
+
+      if (parsedArray.length > 15) {
+        showWarning('Agar visualisasi tetap nyaman dilihat di layar, maksimal 15 angka ya!');
+        return;
+      }
+
+      currentArray = parsedArray;
+      targetValue = parsedTarget;
+      resetSimulation();
+      addLog(`Data baru diterapkan: Array = [${currentArray.join(', ')}], Target = ${targetValue}`);
+    }
+
+    // Acak Angka Baru
+    function generateRandomArray() {
+      if (isRunning) togglePlay();
+      const length = Math.floor(Math.random() * 5) + 6; // 6 sampai 10 elemen
+      const newArr = [];
+      for (let i = 0; i < length; i++) {
+        newArr.push(Math.floor(Math.random() * 90) + 10); // Angka 10-99
+      }
+      currentArray = newArr;
+      // Ambil target acak dari array (agar kadang ketemu) atau acak bebas
+      if (Math.random() > 0.3) {
+        targetValue = currentArray[Math.floor(Math.random() * currentArray.length)];
+      } else {
+        targetValue = Math.floor(Math.random() * 90) + 10;
+      }
+
+      document.getElementById('input-array').value = currentArray.join(', ');
+      document.getElementById('input-target').value = targetValue;
+      resetSimulation();
+      addLog(`Mengacak data baru: [${currentArray.join(', ')}], Target: ${targetValue}`);
+    }
+
+    // Preset Data
+    function setPresetArray(type) {
+      if (isRunning) togglePlay();
+
+      if (type === 'sorted') {
+        currentArray = [4, 12, 19, 27, 35, 42, 58, 63, 77];
+        targetValue = 42;
+        document.getElementById('input-array').value = currentArray.join(', ');
+        document.getElementById('input-target').value = targetValue;
+        resetSimulation();
+        addLog(`Memuat preset data terurut: [${currentArray.join(', ')}], Target = 42`);
+      } else if (type === 'notfound') {
+        currentArray = [10, 25, 33, 48, 55, 62, 80];
+        targetValue = 99; // Tidak ada
+        document.getElementById('input-array').value = currentArray.join(', ');
+        document.getElementById('input-target').value = targetValue;
+        resetSimulation();
+        addLog(`Memuat kasus tidak ketemu: [${currentArray.join(', ')}], Target = 99 (Tidak ada)`);
+      }
+    }
+
+    // Reset Simulasi
+    function resetSimulation() {
+      if (isRunning) {
+        clearInterval(timerInterval);
+        isRunning = false;
+        document.getElementById('btn-play').innerHTML = '▶️ Jalankan Otomatis';
+        document.getElementById('btn-play').classList.remove('btn-warning');
+        document.getElementById('btn-play').classList.add('btn-success');
+      }
+
+      currentIndex = -1;
+      isFinished = false;
+      isFound = false;
+      comparisonsCount = 0;
+
+      renderArray();
+      updateStats();
+
+      // Reset tampilan status
+      const pill = document.getElementById('status-pill');
+      pill.className = 'status-badge status-ready';
+      pill.innerText = 'Siap Memulai';
+
+      document.getElementById('step-indicator').innerText = 'Langkah 0';
+      document.getElementById('step-narration-text').innerHTML =
+        'Klik <strong>"Langkah Selanjutnya (Step)"</strong> atau <strong>"Jalankan Otomatis"</strong> untuk memulai.';
+
+      document.getElementById('btn-step').disabled = false;
+      document.getElementById('btn-play').disabled = false;
+
+      // Bersihkan log
+      document.getElementById('simulation-log').innerHTML =
+        `<div class="log-item">Sistem siap. Mencari angka <strong>${targetValue}</strong> pada array ukuran ${currentArray.length}.</div>`;
+    }
+
+    // Langkah Demi Langkah (Step-by-Step)
+    function stepSimulation() {
+      if (isFinished) return;
+
+      // Bersihkan indikator sebelumnya jika bukan ketemu
+      if (currentIndex >= 0 && currentIndex < currentArray.length) {
+        const prevArrow = document.getElementById('arrow-' + currentIndex);
+        const prevCell = document.getElementById('cell-' + currentIndex);
+        if (prevArrow) prevArrow.classList.remove('visible');
+
+        if (!isFound) {
+          if (prevCell) {
+            prevCell.classList.remove('checking');
+            prevCell.classList.add('mismatch');
+          }
+        }
+      }
+
+      currentIndex++;
+      comparisonsCount++;
+      updateStats();
+
+      const pill = document.getElementById('status-pill');
+      pill.className = 'status-badge status-running';
+      pill.innerText = 'Sedang Memeriksa...';
+
+      document.getElementById('step-indicator').innerText = `Langkah ${comparisonsCount}`;
+
+      // Kasus 1: Masih dalam rentang array
+      if (currentIndex < currentArray.length) {
+        const currentVal = currentArray[currentIndex];
+        const arrow = document.getElementById('arrow-' + currentIndex);
+        const cell = document.getElementById('cell-' + currentIndex);
+
+        if (arrow) arrow.classList.add('visible');
+        if (cell) cell.classList.add('checking');
+
+        if (currentVal === targetValue) {
+          // KETEMU!
+          isFound = true;
+          isFinished = true;
+          cell.classList.remove('checking');
+          cell.classList.add('found');
+
+          pill.className = 'status-badge status-found';
+          pill.innerText = '🎉 Target Ditemukan!';
+
+          document.getElementById('step-narration-text').innerHTML =
+            `<strong>Selesai!</strong> Elemen pada indeks <code>[${currentIndex}]</code> bernilai <strong>${currentVal}</strong> sama dengan target <strong>${targetValue}</strong>. Pencarian dihentikan.`;
+
+          addLog(`[Langkah ${comparisonsCount}] Indeks [${currentIndex}] bernilai ${currentVal} == ${targetValue} ✅ COCOK! Target DITEMUKAN.`);
+
+          stopAutoPlay();
+          document.getElementById('btn-step').disabled = true;
+          document.getElementById('btn-play').disabled = true;
+        } else {
+          // BELUM COCOK
+          document.getElementById('step-narration-text').innerHTML =
+            `Memeriksa indeks <code>[${currentIndex}]</code>: Nilai adalah <strong>${currentVal}</strong>. Apakah ${currentVal} == ${targetValue}? <strong>Bukan!</strong> Melanjutkan ke indeks berikutnya...`;
+
+          addLog(`[Langkah ${comparisonsCount}] Indeks [${currentIndex}] bernilai ${currentVal} != ${targetValue} (Bukan target).`);
+        }
+      } else {
+        // Kasus 2: Telah memeriksa semua elemen dan TIDAK KETEMU
+        isFinished = true;
+        pill.className = 'status-badge status-notfound';
+        pill.innerText = '❌ Tidak Ditemukan';
+
+        document.getElementById('step-narration-text').innerHTML =
+          `<strong>Selesai (Gagal):</strong> Seluruh ${currentArray.length} elemen telah diperiksa, tetapi angka <strong>${targetValue}</strong> tidak ada di dalam daftar data.`;
+
+        addLog(`[Hasil Akhir] Seluruh elemen telah diperiksa. Target ${targetValue} TIDAK DITEMUKAN dalam array.`);
+
+        stopAutoPlay();
+        document.getElementById('btn-step').disabled = true;
+        document.getElementById('btn-play').disabled = true;
+      }
+    }
+
+    // Toggle Play Otomatis
+    function togglePlay() {
+      if (isFinished) return;
+
+      const playBtn = document.getElementById('btn-play');
+      const speed = parseInt(document.getElementById('select-speed').value, 10) || 900;
+
+      if (!isRunning) {
+        isRunning = true;
+        playBtn.innerHTML = '⏸️ Jeda (Pause)';
+        playBtn.classList.remove('btn-success');
+        playBtn.classList.add('btn-warning');
+
+        // Jalankan langkah pertama segera jika baru mulai
+        stepSimulation();
+
+        timerInterval = setInterval(() => {
+          if (!isFinished && isRunning) {
+            stepSimulation();
+          } else {
+            stopAutoPlay();
+          }
+        }, speed);
+      } else {
+        stopAutoPlay();
+      }
+    }
+
+    function stopAutoPlay() {
+      if (timerInterval) clearInterval(timerInterval);
+      isRunning = false;
+      const playBtn = document.getElementById('btn-play');
+      if (playBtn) {
+        playBtn.innerHTML = '▶️ Jalankan Otomatis';
+        playBtn.classList.remove('btn-warning');
+        playBtn.classList.add('btn-success');
+      }
+    }
+
+    // Tambahkan Catatan ke Log
+    function addLog(message) {
+      const logBox = document.getElementById('simulation-log');
+      const item = document.createElement('div');
+      item.className = 'log-item';
+      item.innerHTML = message;
+      logBox.prepend(item);
+    }
+
+    // Validasi Kuis Mini
+    function checkAnswer(button, isCorrect, explanation) {
+      const options = button.parentElement.querySelectorAll('.quiz-btn');
+      options.forEach(btn => {
+        btn.disabled = true;
+        btn.classList.remove('correct', 'incorrect');
+      });
+
+      const feedback = document.getElementById('quiz-feedback-box');
+      feedback.style.display = 'block';
+
+      if (isCorrect) {
+        button.classList.add('correct');
+        feedback.style.color = '#065f46';
+        feedback.innerHTML = '🎉 ' + explanation;
+      } else {
+        button.classList.add('incorrect');
+        feedback.style.color = '#991b1b';
+        feedback.innerHTML = '❌ ' + explanation;
+      }
+    }
+  </script>
+</body>
+</html>

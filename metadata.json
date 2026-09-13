@@ -1,0 +1,6 @@
+{
+  "name": "Media Pembelajaran Algoritma Pencarian",
+  "description": "Web pembelajaran interaktif materi Algoritma Pencarian (Linear Search) untuk Informatika SMA Kelas 10 Fase E dengan simulasi langkah demi langkah.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
